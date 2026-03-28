@@ -40,7 +40,7 @@ LX2160A_BRANCH="$_lx2160a_branch"
 
 LINUX_SRC="$SRC_CACHE_DIR/linux"
 LX2160A_SRC="$SRC_CACHE_DIR/lx2160a_build"
-PKG_CACHE="$PACMAN_CACHE_DIR"
+PACMAN_CACHE="$PACMAN_CACHE_DIR"
 
 # ---------------------------------------------------------------------------
 # Checks
@@ -80,7 +80,7 @@ fi
 # cloning when the directories already exist)
 # ---------------------------------------------------------------------------
 
-mkdir -p "$SRC_CACHE_DIR" "$PKG_CACHE"
+mkdir -p "$SRC_CACHE_DIR" "$PACMAN_CACHE"
 
 if [ ! -d "$LINUX_SRC" ]; then
     echo "Cloning linux kernel..."
@@ -108,7 +108,7 @@ podman build \
     --build-arg "KEEP_ON_FAIL=$KEEP_ON_FAIL" \
     -v "$LINUX_SRC:/build/src/linux:O" \
     -v "$LX2160A_SRC:/build/src/lx2160a_build:O" \
-    -v "$PKG_CACHE:/var/cache/pacman/pkg" \
+    -v "$PACMAN_CACHE:/var/cache/pacman/pkg" \
     "$SCRIPT_DIR"
 
 echo ""
@@ -116,7 +116,7 @@ echo "To enter the build container interactively:"
 echo "  podman run --rm -it --platform linux/arm64 \\"
 echo "    -v $LINUX_SRC:/build/src/linux:O \\"
 echo "    -v $LX2160A_SRC:/build/src/lx2160a_build:O \\"
-echo "    -v $PKG_CACHE:/var/cache/pacman/pkg \\"
+echo "    -v $PACMAN_CACHE:/var/cache/pacman/pkg \\"
 echo "    $BUILD_IMAGE /bin/bash"
 
 echo ""
