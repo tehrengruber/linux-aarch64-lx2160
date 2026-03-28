@@ -127,9 +127,6 @@ _package() {
   echo "Installing modules..."
   make INSTALL_MOD_PATH="$pkgdir/usr" INSTALL_MOD_STRIP=1 modules_install
 
-  # remove build and source links
-  rm "$modulesdir"/{source,build}
-
   local _subst="
     s|%PKGBASE%|${pkgbase}|g
     s|%KERNVER%|${kernver}|g
