@@ -4,7 +4,7 @@
 pkgbase=linux-aarch64-lx2160
 pkgver=6.6.52
 _pkgver=lf-6.6.52-2.2.0
-pkgrel=1
+pkgrel=2
 pkgdesc='Linux for SolidRun LX2160A'
 url="https://github.com/nxp-qoriq/linux/tree/${_pkgver}"
 _linux_url="https://github.com/nxp-qoriq/linux"
@@ -51,12 +51,18 @@ prepare() {
   fi
 
   echo "Cloning linux kernel"
+  _commit=$(git ls-remote --tags "$_linux_url" "refs/tags/$_pkgver" | head -1 | cut -f1)
   if [ ! -d "linux" ]; then
-    git clone --depth 1 -b "$_pkgver" "$_linux_url"
+    git clone --depth 1 "$_linux_url"
+    cd linux
+    git fetch --depth 1 origin "$_commit"
+    git checkout "$_commit"
+    cd ..
   else
     pushd $srcdir/linux > /dev/null
     echo "Warning: Linux kernel source directory already exists. Moving HEAD."
-    git checkout ${_pkgver}
+    git fetch --depth 1 origin "$_commit"
+    git checkout "$_commit"
     popd > /dev/null
   fi
   
