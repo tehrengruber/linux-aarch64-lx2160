@@ -25,7 +25,7 @@ while [[ "${1:-}" ]]; do
 done
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-SRC_CACHE_DIR="${SRC_CACHE_DIR:-$SCRIPT_DIR/cache}"
+SRC_CACHE_DIR="${SRC_CACHE_DIR:-$SCRIPT_DIR/src}"
 PKG_SRC_CACHE_DIR="${PKG_SRC_CACHE_DIR:-/tmp/lx2160-pkg-cache}"
 BUILD_IMAGE="archlinuxarm-lx2160-build"
 ALARM_TARBALL="$SCRIPT_DIR/ArchLinuxARM-aarch64-latest.tar.gz"
