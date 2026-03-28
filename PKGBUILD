@@ -142,7 +142,7 @@ _package() {
 
 _package-headers() {
   pkgdesc="Headers and scripts for building modules for the $pkgdesc kernel"
-  depends=(pahole)
+  depends=()
 
   cd $srcdir/linux
   local builddir="$pkgdir/usr/lib/modules/$(<version)/build"
