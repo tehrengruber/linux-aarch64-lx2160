@@ -9,10 +9,14 @@
 
 set -euo pipefail
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
 KEEP_ON_FAIL=false
+SRC_CACHE_DIR="$SCRIPT_DIR/src"
 while [[ "${1:-}" ]]; do
     case "$1" in
         --keep-on-fail) KEEP_ON_FAIL=true ;;
+        --src-cache-dir) SRC_CACHE_DIR="$2"; shift ;;
         *) echo "Unknown option: $1"; exit 1 ;;
     esac
     shift
@@ -28,8 +32,8 @@ LINUX_BRANCH="lf-6.6.52-2.2.0"
 LX2160A_URL="https://github.com/SolidRun/lx2160a_build.git"
 LX2160A_BRANCH="develop-ls-6.6.52-2.2.0"
 
-LINUX_SRC="$SCRIPT_DIR/src/linux"
-LX2160A_SRC="$SCRIPT_DIR/src/lx2160a_build"
+LINUX_SRC="$SRC_CACHE_DIR/src/linux"
+LX2160A_SRC="$SRC_CACHE_DIR/src/lx2160a_build"
 
 # ---------------------------------------------------------------------------
 # Checks
@@ -69,7 +73,7 @@ fi
 # cloning when the directories already exist)
 # ---------------------------------------------------------------------------
 
-mkdir -p "$SCRIPT_DIR/src"
+mkdir -p "$SRC_CACHE_DIR"
 
 if [ ! -d "$LINUX_SRC" ]; then
     echo "Cloning linux kernel..."
