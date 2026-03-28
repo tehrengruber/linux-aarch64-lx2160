@@ -1,7 +1,7 @@
 # Maintainer: Jan Alexander Steffens (heftig) <heftig@archlinux.org>
 # todo: change mkinitcpio
 
-pkgbase=linux
+pkgbase=linux-aarch64-lx2160
 pkgver=6.6.52
 _pkgver=lf-6.6.52-2.2.0
 pkgrel=1
