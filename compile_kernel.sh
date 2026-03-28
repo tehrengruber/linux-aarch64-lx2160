@@ -12,21 +12,21 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 KEEP_ON_FAIL=false
-CACHE_DIR=""
-PKG_CACHE_DIR=""
+SRC_CACHE_DIR=""
+PKG_SRC_CACHE_DIR=""
 while [[ "${1:-}" ]]; do
     case "$1" in
         --keep-on-fail) KEEP_ON_FAIL=true ;;
-        --cache-dir) CACHE_DIR="$2"; shift ;;
-        --pkg-cache-dir) PKG_CACHE_DIR="$2"; shift ;;
+        --src-cache-dir) SRC_CACHE_DIR="$2"; shift ;;
+        --pkg-cache-dir) PKG_SRC_CACHE_DIR="$2"; shift ;;
         *) echo "Unknown option: $1"; exit 1 ;;
     esac
     shift
 done
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-CACHE_DIR="${CACHE_DIR:-$SCRIPT_DIR/cache}"
-PKG_CACHE_DIR="${PKG_CACHE_DIR:-/tmp/lx2160-pkg-cache}"
+SRC_CACHE_DIR="${SRC_CACHE_DIR:-$SCRIPT_DIR/cache}"
+PKG_SRC_CACHE_DIR="${PKG_SRC_CACHE_DIR:-/tmp/lx2160-pkg-cache}"
 BUILD_IMAGE="archlinuxarm-lx2160-build"
 ALARM_TARBALL="$SCRIPT_DIR/ArchLinuxARM-aarch64-latest.tar.gz"
 ALARM_URL="http://os.archlinuxarm.org/os/ArchLinuxARM-aarch64-latest.tar.gz"
@@ -38,9 +38,9 @@ LINUX_BRANCH="$_pkgver"
 LX2160A_URL="$_lx2160a_url"
 LX2160A_BRANCH="$_lx2160a_branch"
 
-LINUX_SRC="$CACHE_DIR/linux"
-LX2160A_SRC="$CACHE_DIR/lx2160a_build"
-PKG_CACHE="$PKG_CACHE_DIR"
+LINUX_SRC="$SRC_CACHE_DIR/linux"
+LX2160A_SRC="$SRC_CACHE_DIR/lx2160a_build"
+PKG_CACHE="$PKG_SRC_CACHE_DIR"
 
 # ---------------------------------------------------------------------------
 # Checks
@@ -80,7 +80,7 @@ fi
 # cloning when the directories already exist)
 # ---------------------------------------------------------------------------
 
-mkdir -p "$CACHE_DIR" "$PKG_CACHE"
+mkdir -p "$SRC_CACHE_DIR" "$PKG_CACHE"
 
 if [ ! -d "$LINUX_SRC" ]; then
     echo "Cloning linux kernel..."
