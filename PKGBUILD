@@ -7,6 +7,9 @@ _pkgver=lf-6.6.52-2.2.0
 pkgrel=1
 pkgdesc='Linux for SolidRun LX2160A'
 url="https://github.com/nxp-qoriq/linux/tree/${_pkgver}"
+_linux_url="https://github.com/nxp-qoriq/linux"
+_lx2160a_url="https://github.com/SolidRun/lx2160a_build.git"
+_lx2160a_branch="develop-ls-6.6.52-2.2.0"
 arch=('aarch64')
 license=(GPL2)
 makedepends=(
@@ -44,12 +47,12 @@ _strip="strip"
 prepare() {
   echo "Cloning lx2160a build files"
   if [ ! -d "lx2160a_build" ]; then
-    git clone --depth 1 -b develop-ls-6.6.52-2.2.0 https://github.com/SolidRun/lx2160a_build.git
+    git clone --depth 1 -b "$_lx2160a_branch" "$_lx2160a_url"
   fi
 
   echo "Cloning linux kernel"
   if [ ! -d "linux" ]; then
-    git clone --depth 1 -b ${_pkgver} https://github.com/nxp-qoriq/linux
+    git clone --depth 1 -b "$_pkgver" "$_linux_url"
   else
     pushd $srcdir/linux > /dev/null
     echo "Warning: Linux kernel source directory already exists. Moving HEAD."

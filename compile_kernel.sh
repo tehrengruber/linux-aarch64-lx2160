@@ -27,10 +27,12 @@ BUILD_IMAGE="archlinuxarm-lx2160-build"
 ALARM_TARBALL="$SCRIPT_DIR/ArchLinuxARM-aarch64-latest.tar.gz"
 ALARM_URL="http://os.archlinuxarm.org/os/ArchLinuxARM-aarch64-latest.tar.gz"
 
-LINUX_URL="https://github.com/nxp-qoriq/linux"
-LINUX_BRANCH="lf-6.6.52-2.2.0"
-LX2160A_URL="https://github.com/SolidRun/lx2160a_build.git"
-LX2160A_BRANCH="develop-ls-6.6.52-2.2.0"
+# Source URLs and branches from PKGBUILD
+eval "$(grep -E '^(_pkgver|_linux_url|_lx2160a_url|_lx2160a_branch)=' "$SCRIPT_DIR/PKGBUILD")"
+LINUX_URL="$_linux_url"
+LINUX_BRANCH="$_pkgver"
+LX2160A_URL="$_lx2160a_url"
+LX2160A_BRANCH="$_lx2160a_branch"
 
 LINUX_SRC="$SRC_CACHE_DIR/src/linux"
 LX2160A_SRC="$SRC_CACHE_DIR/src/lx2160a_build"
