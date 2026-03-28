@@ -106,6 +106,13 @@ podman build \
     "$SCRIPT_DIR"
 
 echo ""
+echo "To enter the build container interactively:"
+echo "  podman run --rm -it --platform linux/arm64 \\"
+echo "    -v $LINUX_SRC:/build/src/linux:O \\"
+echo "    -v $LX2160A_SRC:/build/src/lx2160a_build:O \\"
+echo "    $BUILD_IMAGE /bin/bash"
+
+echo ""
 echo "Exporting packages..."
 TMP_CONTAINER=$(podman create --platform linux/arm64 "$BUILD_IMAGE")
 podman cp "$TMP_CONTAINER:/build/." "$SCRIPT_DIR/"
