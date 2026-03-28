@@ -2,16 +2,15 @@
 # todo: change mkinitcpio
 
 pkgbase=linux
-pkgver=LSDK.21.08
-_pkgver=LSDK-21.08
+pkgver=6.6.52
+_pkgver=lf-6.6.52-2.2.0
 pkgrel=1
-pkgdesc='Linux'
-_srctag=v${pkgver%.*}-${pkgver##*.}
-url="https://git.archlinux.org/linux.git/log/?h=$_srctag"
+pkgdesc='Linux for SolidRun LX2160A'
+url="https://github.com/nxp-qoriq/linux/tree/${_pkgver}"
 arch=('aarch64')
 license=(GPL2)
 makedepends=(
-  p7zip mtools acpica uboot-tools cpio bison flex
+  7zip mtools acpica uboot-tools cpio bison flex
   #e2tools # not strictly necessary
   make gcc diffutils
   bc kmod libelf pahole perl tar xz
@@ -29,7 +28,6 @@ validpgpkeys=(
 sha256sums=()
 
 _procn=$(getconf _NPROCESSORS_ONLN)
-
 export KBUILD_BUILD_HOST=archlinux
 export KBUILD_BUILD_USER=$pkgbase
 export KBUILD_BUILD_TIMESTAMP="$(date -Ru${SOURCE_DATE_EPOCH:+d @$SOURCE_DATE_EPOCH})"
@@ -46,12 +44,12 @@ _strip="strip"
 prepare() {
   echo "Cloning lx2160a build files"
   if [ ! -d "lx2160a_build" ]; then
-    git clone https://github.com/SolidRun/lx2160a_build.git
+    git clone --depth 1 -b develop-ls-6.6.52-2.2.0 https://github.com/SolidRun/lx2160a_build.git
   fi
 
   echo "Cloning linux kernel"
   if [ ! -d "linux" ]; then
-    git clone --depth 1 -b ${_pkgver} https://source.codeaurora.org/external/qoriq/qoriq-components/linux
+    git clone --depth 1 -b ${_pkgver} https://github.com/nxp-qoriq/linux
   else
     pushd $srcdir/linux > /dev/null
     echo "Warning: Linux kernel source directory already exists. Moving HEAD."
@@ -62,17 +60,14 @@ prepare() {
   cd $srcdir/linux
 
   local src
-  for src in $srcdir/lx2160a_build/patches/linux-$_pkgver/*.patch; do
+  for src in $srcdir/lx2160a_build/patches/linux/*.patch; do
     echo "Applying patch $src..."
     git am $src
   done
 
   echo "Setting config..."
   ./scripts/kconfig/merge_config.sh arch/arm64/configs/defconfig arch/arm64/configs/lsdk.config $srcdir/lx2160a_build/configs/linux/lx2k_additions.config $srcdir/../lx2k_additions.config
-  
 
-#  cd $_srcname/build/linux
-#
   echo "Setting version..."
   echo "-$pkgrel" > localversion.10-pkgrel
   echo "${pkgbase#linux}" > localversion.20-pkgname
@@ -125,10 +120,6 @@ _package() {
 
   # Used by mkinitcpio to name the kernel
   echo "$pkgbase" | install -Dm644 /dev/stdin "$modulesdir/pkgbase"
-
-  #echo "Creating image tree blob"
-  #cp ../../kernel2160cex7.its .
-  #mkimage -f kernel2160cex7.its kernel-lx2160acex7.itb
 
   echo "Installing modules..."
   make INSTALL_MOD_PATH="$pkgdir/usr" INSTALL_MOD_STRIP=1 modules_install
